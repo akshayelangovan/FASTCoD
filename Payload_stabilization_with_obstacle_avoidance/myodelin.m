@@ -1,5 +1,5 @@
 
-function xdot = myodefun(t,x,P,fis1,fis2,fis3,fis4,fis5,fis6,fis7,fis8,fis9,fis10,fis11,fis12,fis13,fis14)
+function xdot = myodelin(t,x,P,fis1,fis2,fis3,fis4,fis5,fis6,fis7,fis8,fis9,fis10,fis11,fis12,fis13,fis14)
 % Contains dynamics for quadrotor single payload system
 % X = [pn;pe;pd;ub;vb;wb;phi;theta;psi;p;q;r;thetaL;phiL;thetaLdot;phiLdot;xL;yL;zL;xLdot;yLdot;zLdot]
 pn = x(1);%% 12 quad states
@@ -34,6 +34,7 @@ F = getF(pd,wb,zLdot,T,fis1,fis2,fis3); % 6 inputs
 tauPsi = evalfis([psi,r],fis4);
 tauPhi = getMphi(pe,vb,yLdot,phiLdot,phi,p,fis5,fis6,fis7,fis8,fis9);
 tauTheta = getMtheta(pn,ub,xLdot,thetaLdot,theta,q,fis10,fis11,fis12,fis13,fis14);
+
 % F = 0;
 % tauPsi = 0;
 % tauPhi = 0;
@@ -45,24 +46,45 @@ pndot = ub;
 pedot = vb;
 pddot = wb;
 
-ubdot = (cos(phi)*sin(theta)*cos(psi) + sin(phi)*sin(psi))*(F/P.m) - (sin(thetaL)*cos(phiL)*T/P.m);
-vbdot = (cos(phi)*sin(theta)*sin(psi) - sin(phi)*cos(psi))*(F/P.m) + (sin(thetaL)*sin(phiL)*T/P.m);
-wbdot = (cos(phi)*cos(theta))*(F/P.m) - P.g - cos(thetaL)*T/P.m;
+% ubdot = (cos(phi)*sin(theta)*cos(psi) + sin(phi)*sin(psi))*(F/P.m) - (sin(thetaL)*cos(phiL)*T/P.m);
+% vbdot = (cos(phi)*sin(theta)*sin(psi) - sin(phi)*cos(psi))*(F/P.m) + (sin(thetaL)*sin(phiL)*T/P.m);
+% wbdot = (cos(phi)*cos(theta))*(F/P.m) - P.g - cos(thetaL)*T/P.m;
+% 
+% phidot = p + q*sin(phi)*tan(theta)+r*cos(phi)*tan(theta);
+% thetadot = q*cos(phi)-r*sin(phi);
+% psidot = q*sin(phi)/cos(theta) + r*cos(phi)/cos(theta);
+% 
+% pdot=(P.Jy-P.Jz)/P.Jx*q*r + 1/P.Jx*tauPhi;
+% qdot=(P.Jz-P.Jx)/P.Jy*p*r + 1/P.Jy*tauTheta;
+% rdot=(P.Jx-P.Jy)/P.Jz*p*q + 1/P.Jz*tauPsi;
+% 
+% thetaLddot = -(P.L*sin(thetaL)*sin(phiL)*T/P.ml) + tauTheta/P.ml;
+% phiLddot = -(P.L*sin(thetaL)*cos(phiL)*T/P.ml) + tauPhi/P.ml;
+% 
+% xLddot = T*sin(thetaL)*cos(phiL)/P.ml;
+% yLddot = T*sin(thetaL)*sin(phiL)/P.ml;
+% zLddot = (T*cos(thetaL) - P.ml*P.g)/P.ml;
 
-phidot = p + q*sin(phi)*tan(theta)+r*cos(phi)*tan(theta);
-thetadot = q*cos(phi)-r*sin(phi);
-psidot = q*sin(phi)/cos(theta) + r*cos(phi)/cos(theta);
+% Linearised dynamics 1 | As per paper
+ubdot = theta*P.g;
+vbdot = -phi * P.g;
+wbdot = -P.g + (F/P.m);
 
-pdot=(P.Jy-P.Jz)/P.Jx*q*r + 1/P.Jx*tauPhi;
-qdot=(P.Jz-P.Jx)/P.Jy*p*r + 1/P.Jy*tauTheta;
-rdot=(P.Jx-P.Jy)/P.Jz*p*q + 1/P.Jz*tauPsi;
+% Check phidot, thetadot, psidot equations
+phidot = p;
+thetadot = q;
+psidot = r;
 
-thetaLddot = -(P.L*sin(thetaL)*sin(phiL)*T/P.ml) + tauTheta/P.ml;
-phiLddot = -(P.L*sin(thetaL)*cos(phiL)*T/P.ml) + tauPhi/P.ml;
+pdot=tauPhi/P.Jx;
+qdot=tauTheta/P.Jy;
+rdot=tauPsi/P.Jz;
 
-xLddot = T*sin(thetaL)*cos(phiL)/P.ml;
-yLddot = T*sin(thetaL)*sin(phiL)/P.ml;
-zLddot = (T*cos(thetaL) - P.ml*P.g)/P.ml;
+thetaLddot = tauTheta/P.ml;
+phiLddot = tauPhi/P.ml;
+
+xLddot = T*(thetaL)/P.ml;
+yLddot = T*(thetaL)*(phiL)/P.ml;
+zLddot = (T - P.ml*P.g)/P.ml;
 
 T = P.ml * norm([xLddot;yLddot;zLddot]);
 save('tension.mat','T')

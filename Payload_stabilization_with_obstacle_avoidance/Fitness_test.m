@@ -1,4 +1,7 @@
-function fit = FitFun(R,P)
+load('BestChrom.mat')
+% R = BestChrom.Gene;
+tic
+R = P.lb;
 %Reading FIS files to be trained
 fis1 = readfis('fis1');
 fis2 = readfis('fis2');
@@ -351,8 +354,8 @@ end
 % X = [pn;pe;pd;ub;vb;wb;phi;theta;psi;p;q;r;thetaL;phiL;thetaLdot;phiLdot;xL;yL;zL;xLdot;yLdot;zLdot]
 T = 9.81;
 save('tension.mat','T')
-options=odeset('abstol',1e-3,'reltol',1e-6);
-[t,z]=ode23(@P.ode,P.tspan,P.X0,options,P,fis1,fis2,fis3,fis4,fis5,fis6,fis7,fis8,fis9,fis10,fis11,fis12,fis13,fis14);
+options=odeset('abstol',1e-2,'reltol',1e-4);
+[t,z]=ode45(@myodefun,P.tspan,P.X0,options,P,fis1,fis2,fis3,fis4,fis5,fis6,fis7,fis8,fis9,fis10,fis11,fis12,fis13,fis14);
 %[t,z]=ode45(@Pendctr,tspan,[theta1;theta2;theta1prime;theta2prime],options,m1,m2,l1,l2,g,fis1,fis2);
 % n = size(z,1);
 
@@ -379,4 +382,4 @@ end
 if (sum((z(:,1:3)<-4))~=0)
     fit = fit -8e+08;
 end
-end
+toc

@@ -1,7 +1,7 @@
 
-function [BestChrom]  = CGeneticAlgorithm (M , N, MaxGen , Pc, Pm , Er , Problem)
+function [cgcurve,BestChrom]  = CGeneticAlgorithm (M , N, MaxGen , Pc, Pm , Er , Problem)
 
-% cgcurve = zeros(1,MaxGen);
+cgcurve = zeros(1,MaxGen);
 
 %%  Initialization
 [ population ] = initialization(M, N, Problem);
@@ -9,8 +9,8 @@ for i = 1 : M
     population.Chromosomes(i).fitness = Problem.obj( population.Chromosomes(i).Gene(:),Problem);
 end
 
-% all_fitness_values = [ population.Chromosomes(:).fitness ];
-% [cgcurve(1) , ~ ] = max( all_fitness_values);
+all_fitness_values = [ population.Chromosomes(:).fitness ];
+[cgcurve(1) , ~ ] = max( all_fitness_values);
 
 g = 1;
 disp(['Generation #' , num2str(g)]);
@@ -53,8 +53,8 @@ for g = 2 : MaxGen
     population = newPopulation;
     
     
-% all_fitness_values = [ population.Chromosomes(:).fitness ];
-%  [cgcurve(g) , ~ ] = max( all_fitness_values);
+all_fitness_values = [ population.Chromosomes(:).fitness ];
+ [cgcurve(g) , ~ ] = max( all_fitness_values);
 % cgcurve(g)
     toc
 end
