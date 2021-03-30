@@ -21,8 +21,8 @@ for j = 0:13
     P.lb = [P.lb lb(4*j+1)*ones(1,5) lb(4*j+2)*ones(1,5) lb(4*j+3)*ones(1,5) lb(4*j+4)*ones(1,9)]; % lb
     P.ub = [P.ub ub(4*j+1)*ones(1,5) ub(4*j+2)*ones(1,5) ub(4*j+3)*ones(1,5) ub(4*j+4)*ones(1,9)]; % ub % Initial range of the population
 end
-% P.ode = @myodefun; % For nonlinear dynamics
-P.ode = @myodelin; % For linear dynamics
+P.ode = @myodefun; % For nonlinear dynamics
+% P.ode = @myodelin; % For linear dynamics
 
 % Initial conditions 
 % X = [pn;pe;pd;ub;vb;wb;phi;theta;psi;p;q;r;thetaL;phiL;thetaLdot;phiLdot;xL;yL;zL;xLdot;yLdot;zLdot];

@@ -30,7 +30,7 @@ load('tension.mat') % Loading tension from previous timestep
 %Input from FIS controllers
 % Thrust force
 F = getF(pd,wb,zLdot,T,fis1,fis2,fis3); % 6 inputs
-% Torque forces
+%Torque forces
 tauPsi = evalfis([psi,r],fis4);
 tauPhi = getMphi(pe,vb,yLdot,phiLdot,phi,p,fis5,fis6,fis7,fis8,fis9);
 tauTheta = getMtheta(pn,ub,xLdot,thetaLdot,theta,q,fis10,fis11,fis12,fis13,fis14);
