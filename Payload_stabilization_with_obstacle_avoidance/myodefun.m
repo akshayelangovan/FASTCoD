@@ -21,23 +21,24 @@ phiLdot = x(16);
 % xL = x(17); %% 6 payload position states
 % yL = x(18);
 % zL = x(19);
-xLdot = x(20);
-yLdot = x(21);
-zLdot = x(22);
+% xLdot = x(20);
+% yLdot = x(21);
+% zLdot = x(22);
 
 load('tension.mat') % Loading tension from previous timestep
 
 %Input from FIS controllers
 % Thrust force
-F = getF(pd,wb,zLdot,T,fis1,fis2,fis3); % 6 inputs
-%Torque forces
-tauPsi = evalfis([psi,r],fis4);
-tauPhi = getMphi(pe,vb,yLdot,phiLdot,phi,p,fis5,fis6,fis7,fis8,fis9);
-tauTheta = getMtheta(pn,ub,xLdot,thetaLdot,theta,q,fis10,fis11,fis12,fis13,fis14);
+% F = getF(pd,wb,zLdot,T,fis1,fis2,fis3); % 6 inputs
+% % Torque forces
+% tauPsi = evalfis([psi,r],fis4);
+% tauPhi = getMphi(pe,vb,yLdot,phiLdot,phi,p,fis5,fis6,fis7,fis8,fis9);
+% tauTheta = getMtheta(pn,ub,xLdot,thetaLdot,theta,q,fis10,fis11,fis12,fis13,fis14);
+F = P.m*P.g;
 % F = 0;
-% tauPsi = 0;
-% tauPhi = 0;
-% tauTheta = 0;
+tauPsi = 0;
+tauPhi = 0;
+tauTheta = 0;
 
 % Write equation of motion here
 % xdot=?
@@ -49,9 +50,13 @@ ubdot = (cos(phi)*sin(theta)*cos(psi) + sin(phi)*sin(psi))*(F/P.m) - (sin(thetaL
 vbdot = (cos(phi)*sin(theta)*sin(psi) - sin(phi)*cos(psi))*(F/P.m) + (sin(thetaL)*sin(phiL)*T/P.m);
 wbdot = (cos(phi)*cos(theta))*(F/P.m) - P.g - cos(thetaL)*T/P.m;
 
-phidot = p + q*sin(phi)*tan(theta)+r*cos(phi)*tan(theta);
-thetadot = q*cos(phi)-r*sin(phi);
-psidot = q*sin(phi)/cos(theta) + r*cos(phi)/cos(theta);
+% phidot = p + q*sin(phi)*tan(theta)+r*cos(phi)*tan(theta);
+% thetadot = q*cos(phi)-r*sin(phi);
+% psidot = q*sin(phi)/cos(theta) + r*cos(phi)/cos(theta);
+
+phidot = p;
+thetadot = q;
+psidot = r;
 
 pdot=(P.Jy-P.Jz)/P.Jx*q*r + 1/P.Jx*tauPhi;
 qdot=(P.Jz-P.Jx)/P.Jy*p*r + 1/P.Jy*tauTheta;
@@ -60,10 +65,15 @@ rdot=(P.Jx-P.Jy)/P.Jz*p*q + 1/P.Jz*tauPsi;
 thetaLddot = -(P.L*sin(thetaL)*sin(phiL)*T/P.ml) + tauTheta/P.ml;
 phiLddot = -(P.L*sin(thetaL)*cos(phiL)*T/P.ml) + tauPhi/P.ml;
 
-xLddot = T*sin(thetaL)*cos(phiL)/P.ml;
-yLddot = T*sin(thetaL)*sin(phiL)/P.ml;
-zLddot = (T*cos(thetaL) - P.ml*P.g)/P.ml;
+xLdot = ub - P.L*(-sin(thetaL)*sin(phiL)*phiLdot + cos(thetaL)*cos(phiL)*thetaLdot);
+yLdot = vb - P.L*(sin(thetaL)*cos(phiL)*phiLdot + cos(thetaL)*sin(phiL)*thetaLdot);
+zLdot = wb - P.L*(-sin(thetaL)*thetaLdot);
 
+xLddot = ubdot - T*sin(thetaL)*cos(phiL)/P.ml;
+yLddot = vbdot - T*sin(thetaL)*sin(phiL)/P.ml;
+zLddot = wbdot - (T*cos(thetaL) - P.ml*P.g)/P.ml;
+
+% T = P.ml * norm([ubdot;vbdot;wbdot]-[xLddot;yLddot;zLddot]);
 T = P.ml * norm([xLddot;yLddot;zLddot]);
 save('tension.mat','T')
 
