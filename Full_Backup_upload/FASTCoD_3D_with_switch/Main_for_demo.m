@@ -28,38 +28,35 @@ X = ones(size(points,1),1)*3;
 
 
 % Obstacle List
-S.world = [X*10/3, points(:,1), points(:,2);
+S.world = [X, points(:,1), points(:,2);
     points(:,1), points(:,2), -X;
     -X, points(:,1), points(:,2);
     points(:,1), points(:,2), X;
     points(:,1), -X, points(:,2)
     points(:,1), X, points(:,2)];
-
-% Waypoint List
-S.waypoints = [...
-    1 0 0;
-    3 0 0;
-    5 0 0];
     
 % Initial Condition List
 i3 = 2/sqrt(3);
 P.initstate = [...
-    -2 0 0 -pi/4 0 0 0 0 0 0 0 0 0 0 0 0;
-    -2 0 0 0.0001 0 0 0 0 0 0 0 0 0 0 0 0;
-    2 0 0 pi/4 0 0 0 0 0 0 0 0 0 0 0 0];
+    0 0 0 -pi/4 0 0 0 0 0 0 0 0 0 0 0 0;
+    2 0 0 0.0001 0 0 0 0 0 0 0 0 0 0 0 0;
+    2 0 0 pi/4 0 0 0 0 0 0 0 0 0 0 0 0;
+    2 0 0 -pi/4 0 0 0 0 0 0 0 0 0 0 0 0;
+    0 2 0 0.0001 0 0 0 0 0 0 0 0 0 0 0 0;
+    0 -2 0 0.0001 0 0 0 0 0 0 0 0 0 0 0 0;
+    0 0 2 0.0001 0 0 0 0 0 0 0 0 0 0 0 0;
+    0 0 -2 0.0001 0 0 0 0 0 0 0 0 0 0 0 0;
+    i3 i3 i3 0.0001 0 0 0 0 0 0 0 0 0 0 0 0;
+    i3 i3 -i3 0.0001 0 0 0 0 0 0 0 0 0 0 0 0;
+    i3 -i3 i3 0.0001 0 0 0 0 0 0 0 0 0 0 0 0;
+    i3 -i3 -i3 0.0001 0 0 0 0 0 0 0 0 0 0 0 0;
+    -i3 i3 i3 0.0001 0 0 0 0 0 0 0 0 0 0 0 0;
+    -i3 i3 -i3 0.0001 0 0 0 0 0 0 0 0 0 0 0 0;
+    -i3 -i3 i3 0.0001 0 0 0 0 0 0 0 0 0 0 0 0;
+    -i3 -i3 -i3 0.0001 0 0 0 0 0 0 0 0 0 0 0 0];
     
-disp('Enter 1 for waypoint to stabilization')
-disp('Enter 2 for waypoint to waypoint')
-disp('Enter 3 for waypoint to waypoint to stabilization')
-i = input("Type 1,2 or 3:");
-switch i
-    case 1
-        P.ode = @myodefun1; % function containing system equations for odesolver
-    case 2
-        P.ode = @myodefun2;
-    case 3
-        P.ode = @myodefun;
-end
+
+P.ode = @myodefun; % function containing system equations for odesolver
 
 fis1 = readfis('fisx_7x5'); % FIS files being tuned
 fis2 = readfis('fisroll_7x5');
@@ -113,7 +110,7 @@ toc
 %% 
 
 P.framespersec = 50;    
-P.T = 14; % duration of animation  in seconds
+P.T = 8; % duration of animation  in seconds
 P.tspan=linspace(0,P.T,P.T*P.framespersec); % Generating time span
 
 
@@ -166,13 +163,13 @@ toc
 % open(myVideo)
 
 figure()
-axis([-4 8 -4 4 -4 4])
+axis([-4 4 -4 4 -4 4])
 % view(30,-30)
 view([0,0])
 plot3(S.world(1:98,1),S.world(1:98,2),S.world(1:98,3),'*')
 hold on
 for i = 1:length(t)
-    axis([-4 8 -4 4 -4 4])
+    axis([-4 4 -4 4 -4 4])
 %     view(30,-30)
 view([0 0])
     % plot3([set of X vertices],[set of Y vertices],[set of Z vertices])
