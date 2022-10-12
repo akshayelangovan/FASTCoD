@@ -55,10 +55,13 @@ i = input("Type 1,2 or 3:");
 switch i
     case 1
         P.ode = @myodefun1; % function containing system equations for odesolver
+        P.T = 8; % duration of animation  in seconds
     case 2
         P.ode = @myodefun2;
+        P.T = 20; % duration of animation  in seconds
     case 3
-        P.ode = @myodefun;
+        P.ode = @myodefun2;
+        P.T = 15; % duration of animation  in seconds
 end
 
 fis1 = readfis('fisx_7x5'); % FIS files being tuned
@@ -113,7 +116,7 @@ toc
 %% 
 
 P.framespersec = 50;    
-P.T = 14; % duration of animation  in seconds
+% P.T = 15; % duration of animation  in seconds
 P.tspan=linspace(0,P.T,P.T*P.framespersec); % Generating time span
 
 
@@ -180,18 +183,20 @@ view([0 0])
     hold on
     h3 = drawrod(xq(i),yq(i),zq(i),S.l,aq(i),bq(i));
     hold on
-    obsloc = sensenearest(xq(i),yq(i),zq(i),S);
-    distance2obs = norm(obsloc-[xq(i),yq(i),zq(i)]);
-    if distance2obs<2
-        h4 = plot3([obsloc(1),xq(i)],[obsloc(2),yq(i)],[obsloc(3),zq(i)],'--r');
-    else
-        h4 = plot3([obsloc(1),xq(i)],[obsloc(2),yq(i)],[obsloc(3),zq(i)],'--g');
-    end
+%     obsloc = sensenearest(xq(i),yq(i),zq(i),S);
+%     distance2obs = norm(obsloc-[xq(i),yq(i),zq(i)]);
+%     if distance2obs<2
+%         h4 = plot3([obsloc(1),xq(i)],[obsloc(2),yq(i)],[obsloc(3),zq(i)],'--r');
+%     else
+%         h4 = plot3([obsloc(1),xq(i)],[obsloc(2),yq(i)],[obsloc(3),zq(i)],'--g');
+%     end
+    [x_goal,y_goal,z_goal] = getsubwaypoint(S,t(i));
+    h4 = plot3(x_goal,y_goal,z_goal,"diamond",'MarkerFaceColor','blue','MarkerSize',5);
     hold on
-    if norm(obsloc-[xq(i),yq(i),zq(i)])<S.safe_distance
-        plot3(3,-3,3,'r*');
+    if norm([x_goal,y_goal,z_goal] - [xq(i),yq(i),zq(i)])>0.4
+        plot3(3,-3,3,"square",'MarkerFaceColor','red','MarkerSize',5);
     else
-        plot3(3,-3,3,'g*');
+        plot3(3,-3,3,"square",'MarkerFaceColor','green','MarkerSize',5);
     end
     hold on
     xlabel('x');

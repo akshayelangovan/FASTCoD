@@ -27,19 +27,19 @@ Jz = Jx/2;
 
 
 % get subway point
-x_goal = S.waypoint(1,1);
-y_goal = S.waypoint(1,2);
-z_goal = S.waypoint(1,3);
+x_goal = S.waypoints(1,1);
+y_goal = S.waypoints(1,2);
+z_goal = S.waypoints(1,3);
 % psie = yaw_goal - psi;
 psie=0;
 
-if norm([x_goal,y_goal,z_goal]-[x,y,z])>0.001
+if norm([x_goal,y_goal,z_goal] - [x,y,z])>0.4 %% Policy works only for zero cable angles
     xe = x_goal - x; % calculating x_error
     ye = y_goal - y; % calculating y_error
     ze = z_goal - z; % calculating z_error
     [F,T_theta,T_phi,T_psi] = getF(xe,xdot,ye,ydot,ze,zdot,theta,thetadot,phi,phidot,psie,psidot,fis1,fis2,fis3,fis4,fis5,fis6,S);
 else
-    xe = x_goal - x; % calculating x_error
+    xe = 0; % calculating x_error
     ye = y_goal - y; % calculating y_error
     ze = z_goal - z; % calculating z_error
     [F,T_theta,T_phi,T_psi] = getF(xe,xdot,ye,ydot,ze,zdot,theta,thetadot,phi,phidot,psie,psidot,fis8,fis9,fis10,fis11,fis12,fis6,S);
