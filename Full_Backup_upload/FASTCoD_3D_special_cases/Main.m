@@ -1,4 +1,4 @@
-%% Code for modularized training
+%% Code for waypoint following demonstrations
 % Author : Akshay Elangovan
 
 clc
@@ -22,18 +22,24 @@ S.max_vel_roll = 3; % Max roll velocity (angular) that is permitted
 
 S.safe_distance = 2;
 
-[Y,Z] = meshgrid(-3:1:3);
-points = [Y(:),Z(:)];
-X = ones(size(points,1),1)*3;
+[Y3,Z3] = meshgrid(-3:1:7);
+points3 = [Y3(:),Z3(:)];
+X3 = ones(size(points3,1),1)*3;
+
+[Y10,Z10] = meshgrid(-10:1:10);
+points10 = [Y10(:),Z10(:)];
+X10 = ones(size(points10,1),1)*3;
 
 
 % Obstacle List
-S.world = [X*10/3, points(:,1), points(:,2);
-    points(:,1), points(:,2), -X;
-    -X, points(:,1), points(:,2);
-    points(:,1), points(:,2), X;
-    points(:,1), -X, points(:,2)
-    points(:,1), X, points(:,2)];
+S.world = [...
+    %-X3, points3(:,1), points3(:,2); % -X wall
+    %X3*10/3, points3(:,1), points3(:,2); % +X wall
+    points3(:,1), points3(:,2), -X3]; % -Z wall
+%     points3(:,1), points3(:,2), X3;
+%     points3(:,1), -X3, points3(:,2)
+%     points3(:,1), X3, points3(:,2)];
+
 
 % Waypoint List
 S.waypoints = [...
@@ -44,24 +50,29 @@ S.waypoints = [...
 % Initial Condition List
 i3 = 2/sqrt(3);
 P.initstate = [...
-    -2 0 0 -pi/4 0 0 0 0 0 0 0 0 0 0 0 0;
+    -1 0 0 -pi/4 0 0 0 0 0 0 0 0 0 0 0 0;
     -2 0 0 0.0001 0 0 0 0 0 0 0 0 0 0 0 0;
-    2 0 0 pi/4 0 0 0 0 0 0 0 0 0 0 0 0];
+    1 0 0 0.0001 0 0 0 0 0 0 0 0 0 0 0 0;
+    1 0 0 pi/4 0 0 0 0 0 0 0 0 0 0 0 0];
     
 disp('Enter 1 for waypoint to stabilization')
-disp('Enter 2 for waypoint to waypoint')
+disp('Enter 2 for waypoint to waypoint to waypoint')
 disp('Enter 3 for waypoint to waypoint to stabilization')
-i = input("Type 1,2 or 3:");
-switch i
+disp('Enter 4 for moving waypoint demo')
+S.waypointcase = input("Type 1,2,3 or 4:");
+switch S.waypointcase
     case 1
         P.ode = @myodefun1; % function containing system equations for odesolver
         P.T = 8; % duration of animation  in seconds
     case 2
         P.ode = @myodefun2;
-        P.T = 20; % duration of animation  in seconds
+        P.T = 25; % duration of animation  in seconds
     case 3
         P.ode = @myodefun2;
         P.T = 15; % duration of animation  in seconds
+    case 4
+        P.T = 12; % duration of animation  in seconds
+        P.ode = @myodefun3;
 end
 
 fis1 = readfis('fisx_7x5'); % FIS files being tuned
@@ -111,7 +122,7 @@ end
 toc
 
 %% User interface
-        disp('Running final_check.m for testing')
+disp('Completed loading FISes. Running ode45 for simulation')
 
 %% 
 
@@ -157,14 +168,24 @@ dt = t-t0;
 
 % Calculating Errors
 
-% xe = S.x_goal - xq;
-% ze = S.z_goal - zq;
+x_goal = zeros(size(t));
+y_goal = x_goal;
+z_goal = x_goal;
+xe = zeros(size(t));
+ye = xe;
+ze = xe;
+for i = 1:length(t)
+    [x_goal(i),y_goal(i),z_goal(i)] = getsubwaypoint(S,t(i));
+    xe(i) = x_goal(i) - xq(i);
+    ye(i) = y_goal(i) - yq(i);
+    ze(i) = z_goal(i) - zq(i);
+end
 
 toc
 
 %% Animating
-% To save video, uncomment 63-65,101-104,112
-% myVideo = VideoWriter('vid_obs_XZ_view_for_example_dumb');
+% To save video, uncomment 188-190, 230-233,242
+% myVideo = VideoWriter('vid_XZ_view_for_stabilization_then_waypoint_following');
 % myVideo.FrameRate = 50;
 % open(myVideo)
 
@@ -172,7 +193,8 @@ figure()
 axis([-4 8 -4 4 -4 4])
 % view(30,-30)
 view([0,0])
-plot3(S.world(1:98,1),S.world(1:98,2),S.world(1:98,3),'*')
+% plot3(S.world(1:98,1),S.world(1:98,2),S.world(1:98,3),'*')
+plot3(S.world(:,1),S.world(:,2),S.world(:,3))
 hold on
 for i = 1:length(t)
     axis([-4 8 -4 4 -4 4])
@@ -190,13 +212,14 @@ view([0 0])
 %     else
 %         h4 = plot3([obsloc(1),xq(i)],[obsloc(2),yq(i)],[obsloc(3),zq(i)],'--g');
 %     end
-    [x_goal,y_goal,z_goal] = getsubwaypoint(S,t(i));
-    h4 = plot3(x_goal,y_goal,z_goal,"diamond",'MarkerFaceColor','blue','MarkerSize',5);
+    h4 = plot3(x_goal(i),y_goal(i),z_goal(i),"diamond",'MarkerFaceColor','blue','MarkerSize',5);
     hold on
-    if norm([x_goal,y_goal,z_goal] - [xq(i),yq(i),zq(i)])>0.4
-        plot3(3,-3,3,"square",'MarkerFaceColor','red','MarkerSize',5);
+    if norm([x_goal(i),y_goal(i),z_goal(i)] - [xq(i),yq(i),zq(i)])>0.4
+        h5 = plot3(3,-3,3,"square",'MarkerFaceColor','red','MarkerSize',10);
+        text(3.2,-3,3.05,'\leftarrow Waypoint Following')
     else
-        plot3(3,-3,3,"square",'MarkerFaceColor','green','MarkerSize',5);
+        h5 = plot3(3,-3,2,"square",'MarkerFaceColor','green','MarkerSize',10);
+        text(3.2,-3,2.05,'\leftarrow Payload Stabilization')
     end
     hold on
     xlabel('x');
@@ -213,6 +236,7 @@ view([0 0])
         delete(h2)
         delete(h3)
         delete(h4)
+        delete(h5)
     end
 end
 % close(myVideo)
@@ -225,9 +249,10 @@ end
 
 % Plotting UAV Positions
 figure()
-plot(t,xq,t,yq,t,zq,t,zeros(size(t)))
-legend('x_q','y_q','zq','x,y,z desired')
+plot(t,xq,t,yq,t,zq,t,x_goal,t,y_goal,t,z_goal)
+legend('x_q','y_q','zq','x desired','y desired','z desired','Location','southeast')
 title('Time vs Position States')
+ylim([-min(xq)-0.5 max(xq)+1])
 
 % Plot UAV Velocities
 figure()
