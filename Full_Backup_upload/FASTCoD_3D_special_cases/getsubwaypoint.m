@@ -8,8 +8,10 @@ if S.waypointcase == 1 || S.waypointcase == 2 || S.waypointcase == 3
         i=3;
     elseif t>=24 && t<30
         i=4;
-    else
+    elseif t>=30 && t<38
         i=5;
+    else
+        i=6;
     end
     x_g = S.waypoints(i,1);
     y_g = S.waypoints(i,2);

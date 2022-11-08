@@ -44,15 +44,16 @@ S.world = [...
 % Waypoint List
 S.waypoints = [...
     1 0 0;
-    1 0 2;
-    1 0 0;
-    3 0 0;
-    1 0 0];
+    1 3 0;
+    1 3 3;
+    1 0 3;
+    -2 0 3;
+    -2 0 0];
     
 % Initial Condition List
 i3 = 2/sqrt(3);
 P.initstate = [...
-    -1 0 0 0.0001 0 0 0 0 0 0 0 0 0 0 0 0;
+    -1 0 0 pi/4 0 0 0 0 0 0 0 0 0 0 0 0;
     -2 0 0 0.0001 0 0 0 0 0 0 0 0 0 0 0 0;
     1 0 0 0.0001 0 0 0 0 0 0 0 0 0 0 0 0;
     2 0 0 0.0001 0 0 0 0 0 0 0 0 0 0 0 0;
@@ -70,7 +71,7 @@ switch S.waypointcase
         P.T = 8; % duration of animation  in seconds
     case 2
         P.ode = @myodefun2;
-        P.T = 25; % duration of animation  in seconds
+        P.T = 46; % duration of animation  in seconds
     case 3
         P.ode = @myodefun2;
         P.T = 15; % duration of animation  in seconds
@@ -192,16 +193,16 @@ toc
 
 %% Animating
 % To save video, uncomment 195-197, 237-240,249
-% myVideo = VideoWriter('vid_xz_waypoint_following');
-% myVideo.FrameRate = 50;
-% open(myVideo)
+myVideo = VideoWriter('vid_waypoint_following_3_directions');
+myVideo.FrameRate = 50;
+open(myVideo)
 
 figure()
 axis([-4 4 -4 4 -4 4])
 view(30,-30)
 % view([0,0])
 % plot3(S.world(1:98,1),S.world(1:98,2),S.world(1:98,3),'*')
-plot3(S.world(:,1),S.world(:,2),S.world(:,3))
+plot3(S.world(:,1),S.world(:,2),S.world(:,3),'+')
 hold on
 for i = 1:length(t)
     axis([-4 4 -4 4 -4 4])
@@ -212,13 +213,6 @@ for i = 1:length(t)
     hold on
     h3 = drawrod(xq(i),yq(i),zq(i),S.l,aq(i),bq(i));
     hold on
-%     obsloc = sensenearest(xq(i),yq(i),zq(i),S);
-%     distance2obs = norm(obsloc-[xq(i),yq(i),zq(i)]);
-%     if distance2obs<2
-%         h4 = plot3([obsloc(1),xq(i)],[obsloc(2),yq(i)],[obsloc(3),zq(i)],'--r');
-%     else
-%         h4 = plot3([obsloc(1),xq(i)],[obsloc(2),yq(i)],[obsloc(3),zq(i)],'--g');
-%     end
     h4 = plot3(x_goal(i),y_goal(i),z_goal(i),"diamond",'MarkerFaceColor','blue','MarkerSize',5);
     hold on
     if norm([x_goal(i),y_goal(i),z_goal(i)] - [xq(i),yq(i),zq(i)])>0.4
@@ -234,10 +228,10 @@ for i = 1:length(t)
     zlabel('z');
     pause(1/P.framespersec)
     hold on
-%     if (i~=1)
-%         frame = getframe(gcf);
-%         writeVideo(myVideo, frame);
-%     end
+    if (i~=1)
+        frame = getframe(gcf);
+        writeVideo(myVideo, frame);
+    end
     if (i~=(length(xq)-1))
         delete(h1)
         delete(h2)
@@ -246,7 +240,7 @@ for i = 1:length(t)
         delete(h5)
     end
 end
-% close(myVideo)
+close(myVideo)
 
 % fit = FitFun(z,t,S);
 % disp('Fitness of the current run:')

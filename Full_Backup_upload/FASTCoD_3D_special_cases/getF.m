@@ -10,7 +10,6 @@ function [F,tau_theta,tau_phi,tau_psi] = getF( xe, xedot, ye, yedot, ze,zedot,th
 %     tau = S.max_tau * evalfis(fis2,[(thetades-theta),tedot/S.max_vel_roll]);
 %     F = S.hover_F * evalfis(fis3,[ze/S.max_pos_error;zedot/S.max_vel_error]);
 % end
-
 thetades = evalfis(fis1,[xe/S.max_pos_error;xedot/S.max_vel_error]);
 tau_theta = S.max_tau * evalfis(fis2,[(thetades-theta),thetadot/S.max_vel_roll]);
 phides = evalfis(fis4,[ye/S.max_pos_error;yedot/S.max_vel_error]);
