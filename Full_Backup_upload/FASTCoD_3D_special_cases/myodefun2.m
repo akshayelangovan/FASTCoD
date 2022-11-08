@@ -38,7 +38,7 @@ if norm([x_goal,y_goal,z_goal]-[x,y,z])>0.4
     [F,T_theta,T_phi,T_psi] = getF(xe,xdot,ye,ydot,ze,zdot,theta,thetadot,phi,phidot,psie,psidot,fis1,fis2,fis3,fis4,fis5,fis6,S);
 else
     xe = 0;%x_goal - x; % calculating x_error
-    ye = y_goal - y; % calculating y_error
+    ye = 0; % calculating y_error
     ze = z_goal - z; % calculating z_error
     [F,T_theta,T_phi,T_psi] = getF(xe,xdot,ye,ydot,ze,zdot,theta,thetadot,phi,phidot,psie,psidot,fis8,fis9,fis10,fis11,fis12,fis6,S);
 end

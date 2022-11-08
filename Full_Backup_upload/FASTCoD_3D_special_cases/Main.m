@@ -44,22 +44,26 @@ S.world = [...
 % Waypoint List
 S.waypoints = [...
     1 0 0;
+    1 0 2;
+    1 0 0;
     3 0 0;
-    5 0 0];
+    1 0 0];
     
 % Initial Condition List
 i3 = 2/sqrt(3);
 P.initstate = [...
-    -1 0 0 -pi/4 0 0 0 0 0 0 0 0 0 0 0 0;
+    -1 0 0 0.0001 0 0 0 0 0 0 0 0 0 0 0 0;
     -2 0 0 0.0001 0 0 0 0 0 0 0 0 0 0 0 0;
     1 0 0 0.0001 0 0 0 0 0 0 0 0 0 0 0 0;
+    2 0 0 0.0001 0 0 0 0 0 0 0 0 0 0 0 0;
     1 0 0 pi/4 0 0 0 0 0 0 0 0 0 0 0 0];
     
 disp('Enter 1 for waypoint to stabilization')
 disp('Enter 2 for waypoint to waypoint to waypoint')
 disp('Enter 3 for waypoint to waypoint to stabilization')
 disp('Enter 4 for moving waypoint demo')
-S.waypointcase = input("Type 1,2,3 or 4:");
+disp('Enter 5 for moving circular xy path demo')
+S.waypointcase = input("Type 1,2,3,4 or 5:");
 switch S.waypointcase
     case 1
         P.ode = @myodefun1; % function containing system equations for odesolver
@@ -73,6 +77,9 @@ switch S.waypointcase
     case 4
         P.T = 12; % duration of animation  in seconds
         P.ode = @myodefun3;
+    case 5
+        P.T = 15; % duration of animation  in seconds
+        P.ode = @myodefun4; % Only path following / No switching
 end
 
 fis1 = readfis('fisx_7x5'); % FIS files being tuned
@@ -91,9 +98,9 @@ fis12 = readfis('fisroll_7x5');
 
 tic
 
-load('M9aa.mat');
+load('M9aaslow1.mat');
 R0 = BestChrom.Gene;
-load('M9ii.mat') 
+load('M9iislow.mat') 
 R1 = BestChrom.Gene;
 load('Y1.mat');% Trained controller chromosome + fitness || Y1 - yaw control in XY
 R2 = BestChrom.Gene;
@@ -184,22 +191,22 @@ end
 toc
 
 %% Animating
-% To save video, uncomment 188-190, 230-233,242
-% myVideo = VideoWriter('vid_XZ_view_for_stabilization_then_waypoint_following');
+% To save video, uncomment 195-197, 237-240,249
+% myVideo = VideoWriter('vid_xz_waypoint_following');
 % myVideo.FrameRate = 50;
 % open(myVideo)
 
 figure()
-axis([-4 8 -4 4 -4 4])
-% view(30,-30)
-view([0,0])
+axis([-4 4 -4 4 -4 4])
+view(30,-30)
+% view([0,0])
 % plot3(S.world(1:98,1),S.world(1:98,2),S.world(1:98,3),'*')
 plot3(S.world(:,1),S.world(:,2),S.world(:,3))
 hold on
 for i = 1:length(t)
-    axis([-4 8 -4 4 -4 4])
-%     view(30,-30)
-view([0 0])
+    axis([-4 4 -4 4 -4 4])
+    view(30,-30)
+% view([0 0])
     % plot3([set of X vertices],[set of Y vertices],[set of Z vertices])
     [h1,h2] = drawquad(xq(i),yq(i),zq(i),phiq(i),thetaq(i),psiq(i),r);
     hold on
@@ -252,7 +259,7 @@ figure()
 plot(t,xq,t,yq,t,zq,t,x_goal,t,y_goal,t,z_goal)
 legend('x_q','y_q','zq','x desired','y desired','z desired','Location','southeast')
 title('Time vs Position States')
-ylim([-min(xq)-0.5 max(xq)+1])
+ylim([min(xq)-0.5 max(xq)+1])
 
 % Plot UAV Velocities
 figure()
@@ -277,12 +284,21 @@ xlabel('Seconds')
 ylabel('Radians')
 
 % % Plot force inputs
-% F = zeros(1,length(t));
-% tau_pitch = F;
-% tau_roll = F;
-% tau_yaw = F;
+F = zeros(1,length(t));
+tau_pitch = F;
+tau_roll = F;
+tau_yaw = F;
 % 
-% for i=1:length(xq)
+for i=1:length(xq)
+    [x_g,y_g,z_g] = getsubwaypoint(S,t(i));
+% psie = yaw_goal - psi;
+psie=0;
+
+% if norm([x_goal,y_goal,z_goal]-[x,y,z])>0.4
+    xe = x_g - xq(i); % calculating x_error
+    ye = y_g - yq(i); % calculating y_error
+    ze = z_g - zq(i); % calculating z_error
+    [F(i),tau_pitch(i),tau_roll(i),tau_yaw(i)] = getF(xe,xqdot(i),ye,yqdot(i),ze,zqdot(i),phiq(i),phiqdot(i),thetaq(i),thetaqdot(i),psiq(i),psiqdot(i),fis1,fis2,fis3,fis4,fis5,fis6,S);
 %     obs = sensenearest(xq(i),yq(i),zq(i),S);
 %     [x_goal, y_goal, z_goal, yaw_goal] = oafis(obs,xq(i),yq(i),zq(i),fis7);
 %     xe = x_goal; % calculating x_error
@@ -299,7 +315,7 @@ ylabel('Radians')
 %     tau_pitch(i) = t_theta;
 %     tau_roll(i) = t_phi;
 %     tau_yaw(i) = t_psi;
-% end
+end
 
 % figure()
 % plot(t,F)
