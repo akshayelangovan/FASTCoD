@@ -277,22 +277,63 @@ title('Time vs Cable Angle')
 xlabel('Seconds')
 ylabel('Radians')
 
+% Plot path only
+% waypoints = [...
+%     -2 0 0;
+%     1 0 0;
+%     1 3 0;
+%     1 3 3;
+%     1 0 3;
+%     -2 0 3;
+%     -2 0 0];
+% myVideo = VideoWriter('pathplots_only_waypoint_following_3_directions');
+% myVideo.FrameRate = 50;
+% open(myVideo)
+% 
+% figure()
+% axis([-3 2 -1 4 -2 4])
+% view(30,-30)
+% plot3(S.world(:,1),S.world(:,2),S.world(:,3),'+')
+% hold on
+% h3 = plot3(waypoints(:,1),waypoints(:,2),waypoints(:,3),'y--');
+% hold on
+% axis([-3 2 -1 4 -2 4])
+% hold on
+% for i = 1:length(t)
+%     axis([-3 2 -1 4 -2 4])
+%     view(30,-30)
+%     plot3(xq(i),yq(i),zq(i),'.b');
+%     hold on
+%     plot3(xq(i)+S.l*cos(bq(i))*sin(aq(i)),yq(i)+S.l*sin(bq(i))*sin(aq(i)),zq(i)-S.l*cos(aq(i)),'.r');
+%     hold on
+%     xlabel('x');
+%     ylabel('y');
+%     zlabel('z');
+%     pause(1/P.framespersec)
+%     hold on
+%     if (i~=1)
+%         frame = getframe(gcf);
+%         writeVideo(myVideo, frame);
+%     end
+% end
+% close(myVideo)
+
 % % Plot force inputs
 F = zeros(1,length(t));
 tau_pitch = F;
 tau_roll = F;
 tau_yaw = F;
 % 
-for i=1:length(xq)
-    [x_g,y_g,z_g] = getsubwaypoint(S,t(i));
+% for i=1:length(xq)
+%     [x_g,y_g,z_g] = getsubwaypoint(S,t(i));
 % psie = yaw_goal - psi;
-psie=0;
+% psie=0;
 
 % if norm([x_goal,y_goal,z_goal]-[x,y,z])>0.4
-    xe = x_g - xq(i); % calculating x_error
-    ye = y_g - yq(i); % calculating y_error
-    ze = z_g - zq(i); % calculating z_error
-    [F(i),tau_pitch(i),tau_roll(i),tau_yaw(i)] = getF(xe,xqdot(i),ye,yqdot(i),ze,zqdot(i),phiq(i),phiqdot(i),thetaq(i),thetaqdot(i),psiq(i),psiqdot(i),fis1,fis2,fis3,fis4,fis5,fis6,S);
+%     xe = x_g - xq(i); % calculating x_error
+%     ye = y_g - yq(i); % calculating y_error
+%     ze = z_g - zq(i); % calculating z_error
+%     [F(i),tau_pitch(i),tau_roll(i),tau_yaw(i)] = getF(xe,xqdot(i),ye,yqdot(i),ze,zqdot(i),phiq(i),phiqdot(i),thetaq(i),thetaqdot(i),psiq(i),psiqdot(i),fis1,fis2,fis3,fis4,fis5,fis6,S);
 %     obs = sensenearest(xq(i),yq(i),zq(i),S);
 %     [x_goal, y_goal, z_goal, yaw_goal] = oafis(obs,xq(i),yq(i),zq(i),fis7);
 %     xe = x_goal; % calculating x_error
@@ -309,7 +350,7 @@ psie=0;
 %     tau_pitch(i) = t_theta;
 %     tau_roll(i) = t_phi;
 %     tau_yaw(i) = t_psi;
-end
+% end
 
 % figure()
 % plot(t,F)
