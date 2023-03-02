@@ -39,25 +39,25 @@ MF4='head_on':'ctrimf',[0 1.5707963267949 4.71238898038469 6.28318530717959]
 Name='X_goal'
 Range=[-2 2]
 NumMFs=3
-MF1='NEG':'trimf',[-2 -2 -1]
-MF2='ZER':'trimf',[-1 0 1]
-MF3='POS':'trimf',[1 2 2]
+MF1='mf1':'trimf',[-2 -2 -1]
+MF2='mf2':'trimf',[-1 0 1]
+MF3='mf3':'trimf',[1 2 2]
 
 [Output2]
 Name='Y_goal'
 Range=[-2 2]
 NumMFs=3
-MF1='NEG':'trimf',[-2 -2 -1]
-MF2='ZER':'trimf',[-1 0 1]
-MF3='POS':'trimf',[1 2 2]
+MF1='mf1':'trimf',[-2 -2 -1]
+MF2='mf2':'trimf',[-1 0 1]
+MF3='mf3':'trimf',[1 2 2]
 
 [Output3]
 Name='Z_goal'
 Range=[-2 2]
 NumMFs=3
-MF1='NEG':'trimf',[-2 -2 -1]
-MF2='ZER':'trimf',[-1 0 1]
-MF3='POS':'trimf',[1 2 2]
+MF1='mf1':'trimf',[-2 -2 -1]
+MF2='mf2':'trimf',[-1 0 1]
+MF3='mf3':'trimf',[1 2 2]
 
 [Rules]
 2 0 0, 2 2 2 (1) : 1
