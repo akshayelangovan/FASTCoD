@@ -26,14 +26,14 @@ Jy = S.J;
 Jz = Jx/2;
 
 % Adding Sensor Noise
-x_n = x + randn(1)*0.01*2/3;
-y_n = y + randn(1)*0.01*2/3;
-z_n = z + randn(1)*0.01*2/3;
-xdot_n = xdot + randn(1)*0.01*2/3;
-ydot_n = ydot + randn(1)*0.01*2/3;
-zdot_n = zdot + randn(1)*0.01*2/3;
-theta_n = theta + randn(1)*0.01*(2*pi)/3;
-phi_n = phi + randn(1)*0.01*(2*pi)/3;
+x_n = x + randn(1)*0.05*2/3;
+y_n = y + randn(1)*0.05*2/3;
+z_n = z + randn(1)*0.05*2/3;
+xdot_n = xdot + randn(1)*0.05*2/3;
+ydot_n = ydot + randn(1)*0.05*2/3;
+zdot_n = zdot + randn(1)*0.05*2/3;
+theta_n = theta + randn(1)*0.05*(2*pi)/3;
+phi_n = phi + randn(1)*0.05*(2*pi)/3;
 
 %SENSE sequence:
 obs = sensenearest(x_n,y_n,z_n,S);
