@@ -7,8 +7,8 @@ clear
 
 %% Defining system specifications
 S.M = 2; % Mass of quadrotor
-S.m = 1; % Mass of payload
-S.l = 1; % Length of rigid cable
+S.m = 1.5; % Mass of payload
+S.l = 1.5; % Length of rigid cable
 S.J = 0.17; % Moment of inertia of quadrotor
 
 S.g = 9.81; % acceleration due to gravity
@@ -40,7 +40,7 @@ i3 = 2/sqrt(3);
 P.initstate = [...
     0 0 0 -pi/4 0 0 0 0 0 0 0 0 0 0 0 0;
     2 0 0 0.0001 0 0 0 0 0 0 0 0 0 0 0 0;
-    2 0 0 pi/4 0 0 0 0 0 0 0 0 0 0 0 0;
+    1.5 0 0 pi/4 0 0 0 0 0 0 0 0 0 0 0 0;
     2 0 0 -pi/4 0 0 0 0 0 0 0 0 0 0 0 0;
     0 2 0 0.0001 0 0 0 0 0 0 0 0 0 0 0 0;
     0 -2 0 0.0001 0 0 0 0 0 0 0 0 0 0 0 0;
@@ -168,7 +168,7 @@ axis([-4 4 -4 4 -4 4])
 view([0,0])
 plot3(S.world(1:98,1),S.world(1:98,2),S.world(1:98,3),'*')
 hold on
-for i = 1:length(t)
+for i = 1:2
     axis([-4 4 -4 4 -4 4])
 %     view(30,-30)
 view([0 0])
@@ -200,12 +200,12 @@ view([0 0])
 %         frame = getframe(gcf);
 %         writeVideo(myVideo, frame);
 %     end
-    if (i~=(length(xq)-1))
-        delete(h1)
-        delete(h2)
-        delete(h3)
-        delete(h4)
-    end
+%     if (i~=(length(xq)-1))
+%         delete(h1)
+%         delete(h2)
+%         delete(h3)
+%         delete(h4)
+%     end
 end
 % close(myVideo)
 

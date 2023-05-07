@@ -25,9 +25,9 @@ S.max_pos_error = 3; % Max position error that is expected
 S.max_vel_error = 3; % Max velocity error that is expected
 % S.max_vel_roll = 1; % Max roll velocity (angular) that is permitted
 S.max_vel_roll = 3; % Max roll velocity (angular) that is permitted
-S.x_goal = 0;
-S.y_goal = 0;
-S.z_goal = 0;
+S.x_goal = 3;
+S.y_goal = 3;
+S.z_goal = 3;
 
 %% Defining training specifications
 % Fitness function parameters
@@ -40,11 +40,12 @@ P.trainingcase = 'x'; % could also be z when n_controllers is 2
 %     0 -1 0 0 0 0 0 0;
 %     0 1 0 0 0 0 0 0] * 2.5;
 P.initstate = [...
-%     0 0 0 0.001 0 0 0 0 0 0 0 0 0 0 0 0; % hover at origin - call 1
-    0 0 0 -pi/4 pi/2 0 0 0 0 0 0 0 0 0 0 0; % payload cable at pi/4 - call 2
+    0 0 0 0.001 0 0 0 0 0 0 0 0 0 0 0 0; % hover at origin - call 1
+    0 0 0 -pi/3 pi/4 0 0 0 0 0 0 0 0 0 0 0; % payload cable at pi/4 - call 2
     0 0 0 pi/4 pi/2 0 0 0 0 0 0 0 0 0 0 0;
 %     0 0 0 -pi/4 0 0 0 0 0 0 0 0 0 0 0 0; % payload cable at -pi/4 - call 3
-    -3 0 0 0.001 0 0 0 0 0 0 0 0 0 0 0 0]; % UAV at x = -3 - call 4
+    0 -3 0 0.001 0 0 0 0 0 0 0 0 0 0 0 0;
+    0 0 3 0.001 0 0 0 0 0 0 0 0 0 0 0 0]; % UAV at x = -3 - call 4
 %     3 0 0 0.001 0 0 0 0 0 0 0 0 0 0 0 0; % UAV at x = 3 - call 5
 %     0 0 -3 0.001 0 0 0 0 0 0 0 0 0 0 0 0; % UAV at z = -3 - call 6
 %     0 0 3 0.001 0 0 0 0 0 0 0 0 0 0 0 0; % UAV at z = 3 - call 7
@@ -96,8 +97,8 @@ P.framespersec = 50;
 P.T = 8; % duration of animation  in seconds
 P.tspan=linspace(0,P.T,P.T*P.framespersec); % Generating time span
 
-load('M9aa.mat');
-% load('C3.mat');
+% load('M9aa.mat');
+load('C3.mat');
 R0 = BestChrom.Gene;
 
 for i = 1 : P.nrules

@@ -37,13 +37,13 @@ MF5='LP':'trimf',[0.5 1 1.5]
 Name='F'
 Range=[0 1.5]
 NumMFs=7
-MF1='mf1':'trimf',[-0.25 0 0.25]
-MF2='mf2':'trimf',[0 0.25 0.5]
-MF3='mf3':'trimf',[0.25 0.5 0.75]
-MF4='mf4':'trimf',[0.5 0.75 1]
-MF5='mf5':'trimf',[0.75 1 1.25]
-MF6='mf6':'trimf',[1 1.25 1.5]
-MF7='mf7':'trimf',[1.25 1.5 1.75]
+MF1='LN':'trimf',[-0.25 0 0.25]
+MF2='MN':'trimf',[0 0.25 0.5]
+MF3='SN':'trimf',[0.25 0.5 0.75]
+MF4='Z':'trimf',[0.5 0.75 1]
+MF5='SP':'trimf',[0.75 1 1.25]
+MF6='MP':'trimf',[1 1.25 1.5]
+MF7='LP':'trimf',[1.25 1.5 1.75]
 
 [Rules]
 1 1, 1 (1) : 1

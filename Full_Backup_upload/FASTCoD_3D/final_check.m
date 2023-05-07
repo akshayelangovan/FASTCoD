@@ -16,8 +16,8 @@ for i = 1 : P.nrules
     fis3.rule(i).consequent = R0(i + 2*(P.nvar/P.n_controllers));
 end
 
-% load('M9ii.mat') 
-load('C4ii.mat');
+load('M9ii.mat') 
+% load('C4ii.mat');
 R1 = BestChrom.Gene;
 
 for i = 1:P.nrules
@@ -25,7 +25,7 @@ for i = 1:P.nrules
     fis5.rule(i).consequent = R1(i + (P.nvar/P.n_controllers));
 end
 
-P.T = 10; % duration of animation  in seconds
+P.T = 5; % duration of animation  in seconds
 P.tspan=linspace(0,P.T,P.T*P.framespersec); % Generating time span
 
 
@@ -133,21 +133,25 @@ for i = 1:length(t)
     % plot3([set of X vertices],[set of Y vertices],[set of Z vertices])
     [h1,h2] = drawquad(xq(i),yq(i),zq(i),phiq(i),thetaq(i),psiq(i),r);
     hold on
-    h3 = drawrod(xq(i),yq(i),zq(i),S.l,aq(i),bq(i));
+    [h3,h4] = drawrod(xq(i),yq(i),zq(i),S.l,aq(i),bq(i));
     hold on
-    xlabel('x');
-    ylabel('y');
-    zlabel('z');
+    xlabel('x_w');
+    ylabel('y_w');
+    zlabel('z_w');
     pause(1/P.framespersec)
     hold on
 %     if (i~=1)
 %         frame = getframe(gcf);
 %         writeVideo(myVideo, frame);
 %     end
+if(i==2)
+    saveas(gcf,'scenario1.png')
+end
     if (i~=(length(xq)-1))
         delete(h1)
         delete(h2)
         delete(h3)
+        delete(h4)
     end
 end
 % close(myVideo)
@@ -160,16 +164,18 @@ disp(fit)
 % 
 % Plotting error
 figure()
-plot(t,xq,t,yq,t,zq,t,zeros(size(t)))
-legend('x_q','y_q','zq','x,y,z desired')
-title('Time vs Position States')
+plot(t,xq,t,yq,t,zq,t,3*ones(size(t)))
+legend('x_q','y_q','z_q','x,y,z desired')
+title('UAV Position States vs Time')
+xlabel('Time in seconds')
+ylabel('x_q,y_q,z_q in meters')
 
-% figure()
-% plot(t,aq,t,zeros(size(t)))
-% legend('a_q')
-% title('Time vs Cable Angle')
-% xlabel('Seconds')
-% ylabel('Radians')
+figure()
+plot(t,rad2deg(aq),t,zeros(size(t)))
+legend('a_q')
+title('Cable Angle vs Time')
+xlabel('Time in seconds')
+ylabel('\alpha in degrees')
 % %xe, xedot, ze,zedot,theta,tedot,fis1,fis2,fis3,S
 % F = zeros(1,length(t));
 % tau = F;

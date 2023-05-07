@@ -55,7 +55,7 @@ i3 = 2/sqrt(3);
 P.initstate = [...
     -1 0 0 pi/4 0 0 0 0 0 0 0 0 0 0 0 0;
     -2 0 0 0.0001 0 0 0 0 0 0 0 0 0 0 0 0;
-    1 0 0 0.0001 0 0 0 0 0 0 0 0 0 0 0 0;
+    0 0 0 0.0001 0 0 0 0 0 0 0 0 0 0 0 0;
     2 0 0 0.0001 0 0 0 0 0 0 0 0 0 0 0 0;
     1 0 0 pi/4 0 0 0 0 0 0 0 0 0 0 0 0];
     
@@ -193,21 +193,21 @@ toc
 
 %% Animating
 % To save video, uncomment 195-197, 237-240,249
-myVideo = VideoWriter('vid_waypoint_following_3_directions');
-myVideo.FrameRate = 50;
-open(myVideo)
+% myVideo = VideoWriter('vid_waypoint_following_3_directions');
+% myVideo.FrameRate = 50;
+% open(myVideo)
 
 figure()
-axis([-4 4 -4 4 -4 4])
-view(30,-30)
-% view([0,0])
+axis([-4 8 -4 4 -4 4])
+% view(30,-30)
+view([0,0])
 % plot3(S.world(1:98,1),S.world(1:98,2),S.world(1:98,3),'*')
 plot3(S.world(:,1),S.world(:,2),S.world(:,3),'+')
 hold on
 for i = 1:length(t)
-    axis([-4 4 -4 4 -4 4])
-    view(30,-30)
-% view([0 0])
+    axis([-4 8 -4 4 -4 4])
+%     view(30,-30)
+view([0 0])
     % plot3([set of X vertices],[set of Y vertices],[set of Z vertices])
     [h1,h2] = drawquad(xq(i),yq(i),zq(i),phiq(i),thetaq(i),psiq(i),r);
     hold on
@@ -228,10 +228,10 @@ for i = 1:length(t)
     zlabel('z');
     pause(1/P.framespersec)
     hold on
-    if (i~=1)
-        frame = getframe(gcf);
-        writeVideo(myVideo, frame);
-    end
+%     if (i~=1)
+%         frame = getframe(gcf);
+%         writeVideo(myVideo, frame);
+%     end
     if (i~=(length(xq)-1))
         delete(h1)
         delete(h2)
@@ -240,7 +240,7 @@ for i = 1:length(t)
         delete(h5)
     end
 end
-close(myVideo)
+% close(myVideo)
 
 % fit = FitFun(z,t,S);
 % disp('Fitness of the current run:')
@@ -271,11 +271,11 @@ title('UAV path');
 
 % Plot Payload Cable Angle
 figure()
-plot(t,aq,t,zeros(size(t)))
+plot(t,rad2deg(aq),t,zeros(size(t)))
 legend('\alpha')
 title('Time vs Cable Angle')
 xlabel('Seconds')
-ylabel('Radians')
+ylabel('Degrees')
 
 % Plot path only
 % waypoints = [...

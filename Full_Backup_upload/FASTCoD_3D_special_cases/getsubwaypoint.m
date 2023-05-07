@@ -20,10 +20,12 @@ elseif S.waypointcase == 4
     z_g=0;
     if t<6
         x_g = 1 + t;
-        y_g = t;
+%         y_g = t;
+y_g = 0;
     else
         x_g = 7;
-        y_g = 6;
+%         y_g = 6;
+y_g = 0;
     end
 else
     x_g = 2*cos(t);
