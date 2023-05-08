@@ -25,9 +25,9 @@ S.max_pos_error = 3; % Max position error that is expected
 S.max_vel_error = 3; % Max velocity error that is expected
 % S.max_vel_roll = 1; % Max roll velocity (angular) that is permitted
 S.max_vel_roll = 3; % Max roll velocity (angular) that is permitted
-S.x_goal = 3;
-S.y_goal = 3;
-S.z_goal = 3;
+S.x_goal = 0;
+S.y_goal = 0;
+S.z_goal = 0;
 
 %% Defining training specifications
 % Fitness function parameters
@@ -45,6 +45,7 @@ P.initstate = [...
     0 0 0 pi/4 pi/2 0 0 0 0 0 0 0 0 0 0 0;
 %     0 0 0 -pi/4 0 0 0 0 0 0 0 0 0 0 0 0; % payload cable at -pi/4 - call 3
     0 -3 0 0.001 0 0 0 0 0 0 0 0 0 0 0 0;
+    -3 0 0 pi/4 0 0 0 0 0 0 0 0 0 0 0 0;
     0 0 3 0.001 0 0 0 0 0 0 0 0 0 0 0 0]; % UAV at x = -3 - call 4
 %     3 0 0 0.001 0 0 0 0 0 0 0 0 0 0 0 0; % UAV at x = 3 - call 5
 %     0 0 -3 0.001 0 0 0 0 0 0 0 0 0 0 0 0; % UAV at z = -3 - call 6

@@ -7,8 +7,8 @@ clear
 
 %% Defining system specifications
 S.M = 2; % Mass of quadrotor
-S.m = 1; % Mass of payload
-S.l = 1; % Length of rigid cable
+S.m = 2; % Mass of payload
+S.l = 1.5; % Length of rigid cable
 S.J = 0.17; % Moment of inertia of quadrotor
 % S.M = 1; % Mass of quadrotor
 % S.m = 0.5; % Mass of payload
@@ -55,7 +55,7 @@ P.initstate = [...
     0 0 0 -pi/4 pi/2 0 0 0 0 0 0 0 0 0 0 0;
     2 0 0 0.0001 0 0 0 0 0 0 0 0 0 0 0 0;
     2 0 0 pi/4 0 0 0 0 0 0 0 0 0 0 0 0;
-    2 0 0 -pi/4 0 0 0 0 0 0 0 0 0 0 0 0;
+    2.3 0 0 -pi/4 0 0 0 0 0 0 0 0 0 0 0 0;
     0 2 0 0.0001 0 0 0 0 0 0 0 0 0 0 0 0;
     0 -2 0 0.0001 0 0 0 0 0 0 0 0 0 0 0 0;
     0 0 2 0.0001 0 0 0 0 0 0 0 0 0 0 0 0;

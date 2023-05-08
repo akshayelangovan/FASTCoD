@@ -1,10 +1,11 @@
+
+timestamp = [1,125,375];
 figure()
 axis([-4 4 -4 4 -4 4])
 % view(30,-30)
 view([0,0])
-% plot3(S.world(1:98,1),S.world(1:98,2),S.world(1:98,3),'*')
+plot3(S.world(1:98,1),S.world(1:98,2),S.world(1:98,3),'*')
 hold on
-timestamp = [1,50,350];
 for i = timestamp
     axis([-4 4 -4 4 -4 4])
 %     view(30,-30)
@@ -14,12 +15,12 @@ view([0 0])
     hold on
     [h3,h4] = drawrod(xq(i),yq(i),zq(i),S.l,aq(i),bq(i));
     hold on
-%     obsloc = sensenearest(xq(i),yq(i),zq(i),S);
-%     distance2obs = norm(obsloc-[xq(i),yq(i),zq(i)]);
+    obsloc = sensenearest(xq(i),yq(i),zq(i),S);
+    distance2obs = norm(obsloc-[xq(i),yq(i),zq(i)]);
 %     if distance2obs<2
-%         h4 = plot3([obsloc(1),xq(i)],[obsloc(2),yq(i)],[obsloc(3),zq(i)],'--r');
+%         h5 = plot3([obsloc(1),xq(i)],[obsloc(2),yq(i)],[obsloc(3),zq(i)],'--r');
 %     else
-%         h4 = plot3([obsloc(1),xq(i)],[obsloc(2),yq(i)],[obsloc(3),zq(i)],'--g');
+%         h5 = plot3([obsloc(1),xq(i)],[obsloc(2),yq(i)],[obsloc(3),zq(i)],'--g');
 %     end
     hold on
 %     if norm(obsloc-[xq(i),yq(i),zq(i)])<S.safe_distance
@@ -37,16 +38,10 @@ view([0 0])
 %         frame = getframe(gcf);
 %         writeVideo(myVideo, frame);
 %     end
-%     if (i~=(length(xq)-1))
-%         delete(h1)
-%         delete(h2)
-%         delete(h3)
-%         delete(h4)
-%     end
 end
 hold on
-plot3(0,0,0,'m*')
-text(0,0,0.5,'Desired waypoint')
+% plot3(0,0,0,'m*')
+% text(0,0,0.5,'Desired waypoint')
 % text(-1,0,0.5,'t = 0 sec')
 % text(0.75,0,-1,'t = 5 sec')
 

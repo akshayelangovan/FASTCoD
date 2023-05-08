@@ -1,14 +1,14 @@
 figure()
 axis([-4 4 -4 4 -4 4])
 % view(30,30)
-view([90,0])
+view([0,0])
 % plot3(S.world(1:98,1),S.world(1:98,2),S.world(1:98,3),'*')
 hold on
 timestamp = [1];
 for i = timestamp
     axis([-4 4 -4 4 -4 4])
 %     view(30,30)
-view([90 0])
+view([0 0])
     % plot3([set of X vertices],[set of Y vertices],[set of Z vertices])
     [h1,h2] = drawquad(xq(i),yq(i),zq(i),phiq(i),thetaq(i),psiq(i),r);
     hold on
@@ -45,7 +45,7 @@ view([90 0])
 %     end
 end
 hold on
-plot3(3,3,3,'m*')
-text(2,2,3.5,'Desired Waypoint')
+plot3(0,0,0,'m*')
+text(-1,-1,.5,'Desired Waypoint')
 % text(-1,0,0.5,'t = 0 sec')
 % text(0.75,0,-1,'t = 5 sec')

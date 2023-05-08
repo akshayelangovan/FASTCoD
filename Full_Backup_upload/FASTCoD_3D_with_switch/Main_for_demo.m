@@ -7,8 +7,8 @@ clear
 
 %% Defining system specifications
 S.M = 2; % Mass of quadrotor
-S.m = 1.5; % Mass of payload
-S.l = 1.5; % Length of rigid cable
+S.m = 1; % Mass of payload
+S.l = 1; % Length of rigid cable
 S.J = 0.17; % Moment of inertia of quadrotor
 
 S.g = 9.81; % acceleration due to gravity

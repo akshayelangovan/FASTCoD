@@ -53,7 +53,7 @@ S.waypoints = [...
 % Initial Condition List
 i3 = 2/sqrt(3);
 P.initstate = [...
-    -1 0 0 pi/4 0 0 0 0 0 0 0 0 0 0 0 0;
+    -3 0 0 pi/4 0 0 0 0 2 0 0 0 0 0 0 0;
     -2 0 0 0.0001 0 0 0 0 0 0 0 0 0 0 0 0;
     0 0 0 0.0001 0 0 0 0 0 0 0 0 0 0 0 0;
     2 0 0 0.0001 0 0 0 0 0 0 0 0 0 0 0 0;
@@ -68,7 +68,7 @@ S.waypointcase = input("Type 1,2,3,4 or 5:");
 switch S.waypointcase
     case 1
         P.ode = @myodefun1; % function containing system equations for odesolver
-        P.T = 8; % duration of animation  in seconds
+        P.T = 7.9; % duration of animation  in seconds
     case 2
         P.ode = @myodefun2;
         P.T = 46; % duration of animation  in seconds
@@ -179,6 +179,7 @@ dt = t-t0;
 x_goal = zeros(size(t));
 y_goal = x_goal;
 z_goal = x_goal;
+distancetogoal = x_goal;
 xe = zeros(size(t));
 ye = xe;
 ze = xe;
@@ -187,6 +188,7 @@ for i = 1:length(t)
     xe(i) = x_goal(i) - xq(i);
     ye(i) = y_goal(i) - yq(i);
     ze(i) = z_goal(i) - zq(i);
+    distancetogoal(i) = norm([xe(i),ye(i),ze(i)]);
 end
 
 toc
@@ -198,34 +200,36 @@ toc
 % open(myVideo)
 
 figure()
-axis([-4 8 -4 4 -4 4])
-% view(30,-30)
-view([0,0])
+% axis([-4 8 -4 4 -4 4])
+axis([-4 4 -4 4 -4 4])
+view(30,30)
+% view([0,0])
 % plot3(S.world(1:98,1),S.world(1:98,2),S.world(1:98,3),'*')
 plot3(S.world(:,1),S.world(:,2),S.world(:,3),'+')
 hold on
 for i = 1:length(t)
-    axis([-4 8 -4 4 -4 4])
-%     view(30,-30)
-view([0 0])
+%     axis([-4 8 -4 4 -4 4])
+    axis([-4 4 -4 4 -4 4])
+    view(30,30)
+% view([0 0])
     % plot3([set of X vertices],[set of Y vertices],[set of Z vertices])
     [h1,h2] = drawquad(xq(i),yq(i),zq(i),phiq(i),thetaq(i),psiq(i),r);
     hold on
-    h3 = drawrod(xq(i),yq(i),zq(i),S.l,aq(i),bq(i));
+    [h3,h4] = drawrod(xq(i),yq(i),zq(i),S.l,aq(i),bq(i));
     hold on
-    h4 = plot3(x_goal(i),y_goal(i),z_goal(i),"diamond",'MarkerFaceColor','blue','MarkerSize',5);
+    h5 = plot3(x_goal(i),y_goal(i),z_goal(i),"diamond",'MarkerFaceColor','blue','MarkerSize',5);
     hold on
     if norm([x_goal(i),y_goal(i),z_goal(i)] - [xq(i),yq(i),zq(i)])>0.4
-        h5 = plot3(3,-3,3,"square",'MarkerFaceColor','red','MarkerSize',10);
-        text(3.2,-3,3.05,'\leftarrow Waypoint Following')
+        h6 = plot3(3,-3,3,"square",'MarkerFaceColor','red','MarkerSize',10);
+        text(2.5,-3,3.05,'\leftarrow Waypoint Following')
     else
-        h5 = plot3(3,-3,2,"square",'MarkerFaceColor','green','MarkerSize',10);
-        text(3.2,-3,2.05,'\leftarrow Payload Stabilization')
+        h6 = plot3(3,-3,2,"square",'MarkerFaceColor','green','MarkerSize',10);
+        text(2.5,-3,2.05,'\leftarrow Payload Stabilization')
     end
     hold on
-    xlabel('x');
-    ylabel('y');
-    zlabel('z');
+    xlabel('x_w');
+    ylabel('y_w');
+    zlabel('z_w');
     pause(1/P.framespersec)
     hold on
 %     if (i~=1)
@@ -238,6 +242,7 @@ view([0 0])
         delete(h3)
         delete(h4)
         delete(h5)
+        delete(h6)
     end
 end
 % close(myVideo)
@@ -252,14 +257,18 @@ end
 figure()
 plot(t,xq,t,yq,t,zq,t,x_goal,t,y_goal,t,z_goal)
 legend('x_q','y_q','zq','x desired','y desired','z desired','Location','southeast')
-title('Time vs Position States')
+title('UAV Position States vs Time')
+xlabel('Time in seconds');
+ylabel('x_q,y_q,z_q in meters');
 ylim([min(xq)-0.5 max(xq)+1])
 
 % Plot UAV Velocities
 figure()
 plot(t,xqdot,t,yqdot,t,zqdot)
-legend('x velocity','y velocity','z velocity')
-title('Time vs Velocity States')
+legend('u_q','v_q','w_q')
+xlabel('Time in seconds');
+ylabel('u_q,v_q,w_q in meters/second');
+title('UAV Velocity States vs Time')
 
 % Plot UAV Path
 figure();
@@ -272,10 +281,15 @@ title('UAV path');
 % Plot Payload Cable Angle
 figure()
 plot(t,rad2deg(aq),t,zeros(size(t)))
-legend('\alpha')
-title('Time vs Cable Angle')
-xlabel('Seconds')
-ylabel('Degrees')
+% legend('\alpha_q')
+title('Cable Angle vs Time')
+xlabel('Time in seconds')
+ylabel('\alpha in degrees')
+
+% Plot error in distance
+
+figure();
+plot(t,norm([xe,ye,ze]))
 
 % Plot path only
 % waypoints = [...
@@ -290,32 +304,32 @@ ylabel('Degrees')
 % myVideo.FrameRate = 50;
 % open(myVideo)
 % 
-% figure()
-% axis([-3 2 -1 4 -2 4])
-% view(30,-30)
-% plot3(S.world(:,1),S.world(:,2),S.world(:,3),'+')
-% hold on
-% h3 = plot3(waypoints(:,1),waypoints(:,2),waypoints(:,3),'y--');
-% hold on
-% axis([-3 2 -1 4 -2 4])
-% hold on
-% for i = 1:length(t)
-%     axis([-3 2 -1 4 -2 4])
-%     view(30,-30)
-%     plot3(xq(i),yq(i),zq(i),'.b');
-%     hold on
-%     plot3(xq(i)+S.l*cos(bq(i))*sin(aq(i)),yq(i)+S.l*sin(bq(i))*sin(aq(i)),zq(i)-S.l*cos(aq(i)),'.r');
-%     hold on
-%     xlabel('x');
-%     ylabel('y');
-%     zlabel('z');
-%     pause(1/P.framespersec)
-%     hold on
+figure()
+axis([-3 2 -1 4 -2 4])
+view(30,30)
+plot3(S.world(:,1),S.world(:,2),S.world(:,3),'+','HandleVisibility','off')
+hold on
+h3 = plot3(S.waypoints(:,1),S.waypoints(:,2),S.waypoints(:,3),'m*','HandleVisibility','off');
+hold on
+axis([-3 2 -1 4 -2 4])
+hold on
+for i = 1:length(t)
+    axis([-3 2 -1 4 -2 4])
+    view(30,30)
+    plot3(xq(i),yq(i),zq(i),'.b');
+    hold on
+    plot3(xq(i)+S.l*cos(bq(i))*sin(aq(i)),yq(i)+S.l*sin(bq(i))*sin(aq(i)),zq(i)-S.l*cos(aq(i)),'.r');
+    hold on
+    xlabel('x_w');
+    ylabel('y_w');
+    zlabel('z_w');
+    pause(1/P.framespersec)
+    hold on
 %     if (i~=1)
 %         frame = getframe(gcf);
 %         writeVideo(myVideo, frame);
 %     end
-% end
+end
 % close(myVideo)
 
 % % Plot force inputs

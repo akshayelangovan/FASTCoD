@@ -63,7 +63,7 @@ toc
 % myVideo = VideoWriter('vid_obs_XZ_view_for_example_dumb');
 % myVideo.FrameRate = 50;
 % open(myVideo)
-
+distancetoobs = z(:,1);
 figure()
 axis([-4 4 -4 4 -4 4])
 % view(30,-30)
@@ -77,14 +77,15 @@ view([0 0])
     % plot3([set of X vertices],[set of Y vertices],[set of Z vertices])
     [h1,h2] = drawquad(xq(i),yq(i),zq(i),phiq(i),thetaq(i),psiq(i),r);
     hold on
-    h3 = drawrod(xq(i),yq(i),zq(i),S.l,aq(i),bq(i));
+    [h3,h4] = drawrod(xq(i),yq(i),zq(i),S.l,aq(i),bq(i));
     hold on
     obsloc = sensenearest(xq(i),yq(i),zq(i),S);
     distance2obs = norm(obsloc-[xq(i),yq(i),zq(i)]);
+    distancetoobs(i) = distance2obs;
     if distance2obs<2
-        h4 = plot3([obsloc(1),xq(i)],[obsloc(2),yq(i)],[obsloc(3),zq(i)],'--r');
+        h5 = plot3([obsloc(1),xq(i)],[obsloc(2),yq(i)],[obsloc(3),zq(i)],'--r');
     else
-        h4 = plot3([obsloc(1),xq(i)],[obsloc(2),yq(i)],[obsloc(3),zq(i)],'--g');
+        h5 = plot3([obsloc(1),xq(i)],[obsloc(2),yq(i)],[obsloc(3),zq(i)],'--g');
     end
     hold on
     if norm(obsloc-[xq(i),yq(i),zq(i)])<S.safe_distance
@@ -93,9 +94,9 @@ view([0 0])
         plot3(3,-3,3,'g*');
     end
     hold on
-    xlabel('x');
-    ylabel('y');
-    zlabel('z');
+    xlabel('x_w');
+    ylabel('y_w');
+    zlabel('z_w');
     pause(1/P.framespersec)
     hold on
 %     if (i~=1)
@@ -107,6 +108,7 @@ view([0 0])
         delete(h2)
         delete(h3)
         delete(h4)
+        delete(h5)
     end
 end
 % close(myVideo)
@@ -119,9 +121,41 @@ end
 % 
 % Plotting error
 figure()
-plot(t,xq,t,yq,t,zq,t,zeros(size(t)))
-legend('x_q','y_q','zq','x,y,z desired')
-title('Time vs Position States')
+plot(t,xq,t,yq,t,zq)
+legend('x_q','y_q','z_q')
+ylabel('x_q,y_q,z_q in meters')
+xlabel('Time in seconds')
+title('UAV Position States vs Time')
+
+% Plot UAV Path
+figure();
+plot3(S.world(1:98,1),S.world(1:98,2),S.world(1:98,3),'*')
+hold on
+plot3(xq, yq, zq,'b');
+view([0 0])
+xlabel('x_w');
+ylabel('y_w');
+zlabel('z_w');
+title('UAV path');
+axis([-4 4 -4 4 -4 4])
+
+% Plot Payload Cable Angle
+figure()
+plot(t,rad2deg(aq),t,zeros(size(t)))
+title('Cable Angle vs Time')
+xlabel('Time in seconds')
+ylabel('\alpha in degrees')
+
+% plot distance to closest obstacle
+figure()
+plot(t,distancetoobs)
+ylabel('Distance in meters');
+xlabel('Time in seconds')
+title('Distance between UAV and closest obstacle vs Time')
+ylim([0 3.5])
+hold on
+yline(2)
+legend('Distance to obstacle','Safe distance')
 
 % figure()
 % plot(t,aq,t,zeros(size(t)))
@@ -161,12 +195,6 @@ title('Time vs Position States')
 % plot(t,zqdot,t,xqdot,t,zeros(size(t)))
 % legend('z_qdot','x_qdot','final desired velocity')
 % title('Time vs Velocity States')
-% 
-% figure();
-% plot(xq, zq);
-% xlabel('xq in meters');
-% ylabel('zq in meters');
-% title('UAV path');
 
 % figure(2);
 % hold on
