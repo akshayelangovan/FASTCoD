@@ -6,8 +6,8 @@ fis3 = P.fis3;
 fis4 = P.fis4;
 fis5 = P.fis5;
 
-load('M9aa.mat');% Trained controller chromosome + fitness || M9a - motion tracking in XZ, C3 - stabilization in XZ
-% load('C3.mat');
+% load('M9aa.mat');% Trained controller chromosome + fitness || M9a - motion tracking in XZ, C3 - stabilization in XZ
+load('C3.mat');
 R0 = BestChrom.Gene;
 
 for i = 1 : P.nrules
@@ -16,8 +16,8 @@ for i = 1 : P.nrules
     fis3.rule(i).consequent = R0(i + 2*(P.nvar/P.n_controllers));
 end
 
-load('M9ii.mat') 
-% load('C4ii.mat');
+% load('M9ii.mat') 
+load('C4ii.mat');
 R1 = BestChrom.Gene;
 
 for i = 1:P.nrules
@@ -164,15 +164,18 @@ disp(fit)
 % 
 % Plotting error
 figure()
-plot(t,xq,t,yq,t,zq,t,3*ones(size(t)))
+plot(t,xq,t,yq,t,zq,t,0*ones(size(t)))
+% plot(t,xq,t,zq,t,0*ones(size(t)))
 legend('x_q','y_q','z_q','x,y,z desired')
+% legend('x_q','z_q','x,z desired')
 title('UAV Position States vs Time')
 xlabel('Time in seconds')
 ylabel('x_q,y_q,z_q in meters')
+% ylabel('x_q,z_q in meters')
+ylim([-0.5 0.5])
 
 figure()
 plot(t,rad2deg(aq),t,zeros(size(t)))
-legend('a_q')
 title('Cable Angle vs Time')
 xlabel('Time in seconds')
 ylabel('\alpha in degrees')

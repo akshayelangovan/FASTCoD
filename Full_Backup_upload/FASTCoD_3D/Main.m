@@ -40,12 +40,12 @@ P.trainingcase = 'x'; % could also be z when n_controllers is 2
 %     0 -1 0 0 0 0 0 0;
 %     0 1 0 0 0 0 0 0] * 2.5;
 P.initstate = [...
-    0 0 0 0.001 0 0 0 0 0 0 0 0 0 0 0 0; % hover at origin - call 1
+    0 0 0 pi/4 0 0 0 0 0 0 0 0 0 0 0 0; % hover at origin - call 1
     0 0 0 -pi/3 pi/4 0 0 0 0 0 0 0 0 0 0 0; % payload cable at pi/4 - call 2
     0 0 0 pi/4 pi/2 0 0 0 0 0 0 0 0 0 0 0;
 %     0 0 0 -pi/4 0 0 0 0 0 0 0 0 0 0 0 0; % payload cable at -pi/4 - call 3
     0 -3 0 0.001 0 0 0 0 0 0 0 0 0 0 0 0;
-    -3 0 0 pi/4 0 0 0 0 0 0 0 0 0 0 0 0;
+    -3 0 0 0.001 0 0 0 0 0 0 0 0 0 0 0 0;
     0 0 3 0.001 0 0 0 0 0 0 0 0 0 0 0 0]; % UAV at x = -3 - call 4
 %     3 0 0 0.001 0 0 0 0 0 0 0 0 0 0 0 0; % UAV at x = 3 - call 5
 %     0 0 -3 0.001 0 0 0 0 0 0 0 0 0 0 0 0; % UAV at z = -3 - call 6
