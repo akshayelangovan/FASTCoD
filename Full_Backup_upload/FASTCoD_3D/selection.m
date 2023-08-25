@@ -1,4 +1,5 @@
-%Written by Seyedali Mirjalili 
+% Written by Seyedali Mirjalili
+% Modified by Akshay Elangovan for FASTCoD
 
 function [parent1, parent2] = selection(population)
 

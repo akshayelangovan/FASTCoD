@@ -1,3 +1,8 @@
+% Copyright 2021-2023, University of Cincinnati
+% All rights reserved. See LICENSE file at:
+% https://github.com/akshayelangovan/FASTCoD
+% Additional copyright may be held by others, as reflected in the commit history.
+
 fis1 = P.fis1;
 fis2 = P.fis2;
 fis3 = P.fis3;

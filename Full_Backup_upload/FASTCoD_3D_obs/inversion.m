@@ -1,3 +1,6 @@
+% Written by Seyedali Mirjalili
+% Modified by Akshay Elangovan for FASTCoD
+
 function child = inversion(child,Pi)
 Gene_no = length(child.Gene);
 ub = Gene_no - 1;

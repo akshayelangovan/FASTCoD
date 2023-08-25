@@ -1,3 +1,8 @@
+% Copyright 2021-2023, University of Cincinnati
+% All rights reserved. See LICENSE file at:
+% https://github.com/akshayelangovan/FASTCoD
+% Additional copyright may be held by others, as reflected in the commit history.
+
 function [x_g,y_g,z_g] = getsubwaypoint(S,t)
 if S.waypointcase == 1 || S.waypointcase == 2 || S.waypointcase == 3
     if t<8

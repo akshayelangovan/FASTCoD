@@ -1,3 +1,8 @@
+% Copyright 2021-2023, University of Cincinnati
+% All rights reserved. See LICENSE file at:
+% https://github.com/akshayelangovan/FASTCoD
+% Additional copyright may be held by others, as reflected in the commit history.
+
 function fit = FitFun_2(z,t,S)
 %FITFUN_2 Calculates fitness
 SI = stepinfo(z(:,1),t);

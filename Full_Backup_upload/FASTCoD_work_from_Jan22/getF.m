@@ -1,3 +1,8 @@
+% Copyright 2021-2023, University of Cincinnati
+% All rights reserved. See LICENSE file at:
+% https://github.com/akshayelangovan/FASTCoD
+% Additional copyright may be held by others, as reflected in the commit history.
+
 function [F,tau] = getF( xe, xedot, ze,zedot,theta,tedot,fis1,fis2,fis3,S )
 %GETF FLS for computing quadrotor thrust and roll torque
 %Inputs to the fis's are normalized

@@ -1,4 +1,5 @@
-% Written by Dr. Seyedali Mirjalili
+% Written by Seyedali Mirjalili
+% Modified by Akshay Elangovan for FASTCoD
 
 function [child] = mutation(child,Pm,lb,ub)
 

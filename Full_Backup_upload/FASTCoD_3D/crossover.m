@@ -1,4 +1,5 @@
-% Written by Dr. Seyedali Mirjalili
+% Written by Seyedali Mirjalili
+% Modified by Akshay Elangovan for FASTCoD
 
 function [child1 , child2] = crossover(parent1 , parent2, Pc, crossoverName)
 

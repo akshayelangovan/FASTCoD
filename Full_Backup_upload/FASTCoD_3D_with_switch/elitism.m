@@ -1,4 +1,5 @@
-%Written by Seyedali Mirjalili 
+% Written by Seyedali Mirjalili
+% Modified by Akshay Elangovan for FASTCoD
 
 function [ newPopulation ] = elitism(population , newpopulation, Er)
  

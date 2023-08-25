@@ -1,5 +1,6 @@
 % Written by Seyedali Mirjalili
 % Modified by Akshay Elangovan for FASTCoD
+
 function [cgcurve,avgcurve,BestPop]  = GeneticAlgorithm (P,S)
 
 cgcurve = zeros(1,P.MaxGen);

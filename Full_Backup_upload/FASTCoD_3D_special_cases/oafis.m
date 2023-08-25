@@ -1,3 +1,8 @@
+% Copyright 2021-2023, University of Cincinnati
+% All rights reserved. See LICENSE file at:
+% https://github.com/akshayelangovan/FASTCoD
+% Additional copyright may be held by others, as reflected in the commit history.
+
 function [xgoal,ygoal,zgoal,yawgoal] = oafis(obsloc, xq,yq,zq,fis7)
 % This function runs the Obstacle Avoidance Fuzzy Inference System with
 % preprocessing the location of the obstacle
